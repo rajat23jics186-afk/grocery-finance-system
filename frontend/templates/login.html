@@ -1,0 +1,742 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Grocery Finance System - Secure Login</title>
+    <!-- FontAwesome for Icons -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        
+        :root {
+            --primary: #2874f0;       /* Main brand color */
+            --primary-dark: #1b5ccb;  
+            --accent: #fb641b;        /* Action/Highlight color */
+            --accent-hover: #e05814;
+            --text-main: #212121;
+            --text-muted: #878787;
+            --white: #ffffff;
+            --border-color: #d4d5d9;
+            --error-bg: #ffebee;
+            --error-text: #c62828;
+            --success-bg: #e8f5e9;
+            --success-text: #2e7d32;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', sans-serif;
+        }
+
+        /* 1. Full Page Background Image with Dark Overlay */
+        body {
+            /* High-quality grocery background */
+            background: linear-gradient(rgba(0, 0, 0, 0.65), rgba(0, 0, 0, 0.7)), 
+                        url('https://images.unsplash.com/photo-1542838132-92c53300491e?auto=format&fit=crop&q=80&w=1920') center/cover no-repeat fixed;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            overflow: hidden;
+        }
+
+        /* Ambient floating icons animation around the container */
+        .ambient-icon {
+            position: absolute;
+            color: rgba(255, 255, 255, 0.15);
+            z-index: 0;
+            animation: float 15s infinite ease-in-out;
+        }
+        .ambient-icon:nth-child(1) { top: 15%; left: 10%; font-size: 80px; animation-delay: 0s; }
+        .ambient-icon:nth-child(2) { top: 60%; left: 15%; font-size: 100px; animation-delay: -5s; }
+        .ambient-icon:nth-child(3) { top: 20%; right: 15%; font-size: 90px; animation-delay: -2s; }
+        .ambient-icon:nth-child(4) { top: 70%; right: 10%; font-size: 70px; animation-delay: -8s; }
+
+        @keyframes float {
+            0% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-30px) rotate(10deg); }
+            100% { transform: translateY(0px) rotate(0deg); }
+        }
+
+        /* 2. Main Entry Animation */
+        @keyframes slideUpFadeIn {
+            0% { opacity: 0; transform: translateY(40px); }
+            100% { opacity: 1; transform: translateY(0); }
+        }
+
+        .auth-container {
+            background-color: var(--white);
+            border-radius: 12px;
+            box-shadow: 0 15px 40px rgba(0,0,0,0.4), 0 5px 15px rgba(0,0,0,0.2);
+            position: relative;
+            overflow: hidden;
+            width: 950px;
+            max-width: 95%;
+            min-height: 660px;
+            display: flex;
+            z-index: 10;
+            animation: slideUpFadeIn 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+
+        .auth-form-wrapper {
+            position: absolute;
+            top: 0;
+            height: 100%;
+            transition: all 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            background: var(--white);
+        }
+
+        .sign-in-section {
+            left: 0;
+            width: 50%;
+            z-index: 2;
+        }
+        .auth-container.is-swapped .sign-in-section {
+            transform: translateX(100%);
+            opacity: 0;
+        }
+
+        .sign-up-section {
+            left: 0;
+            width: 50%;
+            opacity: 0;
+            z-index: 1;
+        }
+        .auth-container.is-swapped .sign-up-section {
+            transform: translateX(100%);
+            opacity: 1;
+            z-index: 5;
+        }
+
+        form {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            padding: 0 50px;
+            height: 100%;
+            text-align: left;
+        }
+
+        .form-header {
+            margin-bottom: 30px;
+            width: 100%;
+        }
+
+        .form-header h1 {
+            font-size: 26px;
+            color: var(--text-main);
+            margin-bottom: 8px;
+            font-weight: 700;
+        }
+
+        .form-header p {
+            font-size: 14px;
+            color: var(--text-muted);
+            line-height: 1.5;
+        }
+
+        /* 3. Inputs with Icons Styling */
+        .input-group {
+            position: relative;
+            width: 100%;
+            margin-bottom: 22px;
+        }
+
+        .input-icon {
+            position: absolute;
+            left: 16px;
+            top: 17px;
+            color: var(--text-muted);
+            font-size: 16px;
+            transition: color 0.3s ease, transform 0.3s ease;
+            z-index: 2;
+            pointer-events: none;
+        }
+
+        .input-group input, .input-group select {
+            width: 100%;
+            padding: 16px 14px 12px 46px; /* Extra left padding for the icon */
+            font-size: 15px;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            background: transparent;
+            color: var(--text-main);
+            transition: border-color 0.2s, box-shadow 0.2s;
+            outline: none;
+        }
+        
+        .input-group input::placeholder {
+            color: transparent;
+        }
+
+        .input-group select {
+            appearance: none;
+            padding-top: 14px;
+            padding-bottom: 14px;
+        }
+
+        .input-group label {
+            position: absolute;
+            top: 15px;
+            left: 45px; /* Offset for icon width */
+            font-size: 15px;
+            color: var(--text-muted);
+            transition: all 0.2s ease;
+            pointer-events: none;
+            background: var(--white);
+            padding: 0 4px;
+        }
+
+        /* 4. Focus Animations for Inputs and Icons */
+        .input-group input:focus, .input-group select:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 1px var(--primary);
+        }
+
+        /* Fix label positioning when floating */
+        .input-group input:focus ~ label,
+        .input-group input:not(:placeholder-shown) ~ label,
+        .input-group select:focus ~ label,
+        .input-group select:valid ~ label {
+            top: -9px;
+            left: 10px; /* Moves independently to the top outline */
+            font-size: 12px;
+            color: var(--primary);
+            font-weight: 600;
+        }
+
+        /* Color swap for icons when active */
+        .input-group input:focus ~ .input-icon,
+        .input-group input:not(:placeholder-shown) ~ .input-icon,
+        .input-group select:focus ~ .input-icon,
+        .input-group select:valid ~ .input-icon {
+            color: var(--primary);
+        }
+
+        select:invalid { color: transparent; }
+        select option { color: var(--text-main); }
+
+        .forgot-pass {
+            width: 100%;
+            text-align: right;
+            margin-top: -10px;
+            margin-bottom: 25px;
+        }
+
+        .forgot-pass a {
+            color: var(--primary);
+            font-size: 13px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: color 0.2s;
+        }
+        
+        .forgot-pass a:hover {
+            color: var(--primary-dark);
+        }
+
+        /* 5. Button Hover/Click Physics */
+        .btn-primary {
+            width: 100%;
+            padding: 14px;
+            background: var(--accent);
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 3px 6px rgba(251, 100, 27, 0.3);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .btn-primary:hover {
+            background: var(--accent-hover);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 12px rgba(251, 100, 27, 0.4);
+        }
+        
+        .btn-primary:active {
+            transform: scale(0.97) translateY(0);
+        }
+
+        /* Overlay Styling */
+        .overlay-wrapper {
+            position: absolute;
+            top: 0;
+            left: 50%;
+            width: 50%;
+            height: 100%;
+            overflow: hidden;
+            transition: transform 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            z-index: 100;
+        }
+
+        .auth-container.is-swapped .overlay-wrapper {
+            transform: translateX(-100%);
+        }
+
+        .overlay {
+            /* Since the body already has the image, the overlay can just be a sleek gradient panel */
+            background: linear-gradient(135deg, var(--primary) 0%, #113470 100%);
+            position: relative;
+            left: -100%;
+            height: 100%;
+            width: 200%;
+            transform: translateX(0);
+            transition: transform 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+        }
+
+        /* Animated overlay background shape */
+        .overlay::after {
+            content: '';
+            position: absolute;
+            width: 300px;
+            height: 300px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+            top: -50px;
+            right: -50px;
+            animation: pulse 8s infinite alternate;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); opacity: 0.5; }
+            100% { transform: scale(1.5); opacity: 0.8; }
+        }
+
+        .auth-container.is-swapped .overlay {
+            transform: translateX(50%);
+        }
+
+        .overlay-panel {
+            position: absolute;
+            display: flex;
+            align-items: flex-start;
+            justify-content: center;
+            flex-direction: column;
+            padding: 0 60px;
+            text-align: left;
+            top: 0;
+            height: 100%;
+            width: 50%;
+            transform: translateX(0);
+            transition: transform 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            z-index: 2;
+            color: var(--white);
+        }
+
+        .overlay-left { transform: translateX(-20%); }
+        .auth-container.is-swapped .overlay-left { transform: translateX(0); }
+        .overlay-right { right: 0; transform: translateX(0); }
+        .auth-container.is-swapped .overlay-right { transform: translateX(20%); }
+
+        .overlay-panel h2 {
+            font-size: 38px;
+            font-weight: 700;
+            margin-bottom: 20px;
+            line-height: 1.2;
+        }
+
+        .overlay-panel p {
+            font-size: 16px;
+            font-weight: 300;
+            line-height: 1.6;
+            margin-bottom: 40px;
+            opacity: 0.9;
+        }
+
+        .btn-ghost {
+            background: transparent;
+            border: 2px solid var(--white);
+            color: var(--white);
+            padding: 12px 35px;
+            border-radius: 4px;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .btn-ghost:hover {
+            background: var(--white);
+            color: var(--primary);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.15);
+        }
+
+        /* Loading & Messages */
+        .loading-spinner {
+            display: none;
+            animation: spin 1s infinite linear;
+        }
+
+        .auth-msg {
+            width: 100%;
+            padding: 12px 15px;
+            border-radius: 6px;
+            font-size: 14px;
+            margin-bottom: 20px;
+            display: none;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            animation: bounceIn 0.3s ease-out;
+        }
+
+        @keyframes bounceIn {
+            0% { transform: scale(0.9); opacity: 0; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        .auth-msg i { font-size: 16px; }
+
+        .msg-error { 
+            background: var(--error-bg); 
+            color: var(--error-text); 
+            border-left: 4px solid var(--error-text); 
+        }
+        
+        .msg-success { 
+            background: var(--success-bg); 
+            color: var(--success-text); 
+            border-left: 4px solid var(--success-text); 
+        }
+
+        /* Demo Logs */
+        .demo-box {
+            margin-top: 25px;
+            width: 100%;
+            border-top: 1px solid #eee;
+            padding-top: 15px;
+        }
+
+        .demo-box p {
+            font-size: 12px;
+            color: var(--text-muted);
+            margin-bottom: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            font-weight: 600;
+        }
+
+        .demo-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .demo-tag {
+            background: #f1f3f6;
+            padding: 8px 12px;
+            border-radius: 4px;
+            font-size: 13px;
+            color: var(--text-main);
+            cursor: pointer;
+            border: 1px solid var(--border-color);
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .demo-tag:hover {
+            background: var(--primary);
+            color: #fff;
+            border-color: var(--primary);
+            transform: translateY(-2px);
+        }
+        
+        .brand-logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 25px;
+            color: var(--primary);
+            font-size: 24px;
+            font-weight: 700;
+        }
+    </style>
+</head>
+<body>
+
+<!-- Floating ambient background icons -->
+<i class="ambient-icon fas fa-shopping-cart"></i>
+<i class="ambient-icon fas fa-apple-alt"></i>
+<i class="ambient-icon fas fa-carrot"></i>
+<i class="ambient-icon fas fa-receipt"></i>
+
+<div class="auth-container" id="auth-container">
+    
+    <!-- Sign Up Form -->
+    <div class="auth-form-wrapper sign-up-section">
+        <form id="registerForm">
+            <div class="form-header text-center">
+                <h1>Create Account</h1>
+                <p>Register as a retail or wholesale buyer.</p>
+            </div>
+            
+            <div class="input-group">
+                <input type="text" id="reg-fullname" placeholder=" " />
+                <label>Full Name</label>
+                <i class="fas fa-id-card input-icon"></i>
+            </div>
+            
+            <div class="input-group">
+                <input type="email" id="reg-email" placeholder=" " required />
+                <label>Email Address</label>
+                <i class="fas fa-envelope input-icon"></i>
+            </div>
+            
+            <div class="input-group">
+                <input type="text" id="reg-username" placeholder=" " required />
+                <label>Username</label>
+                <i class="fas fa-user input-icon"></i>
+            </div>
+            
+            <div class="input-group">
+                <input type="password" id="reg-password" placeholder=" " required />
+                <label>Password</label>
+                <i class="fas fa-lock input-icon"></i>
+            </div>
+            
+            <div class="input-group">
+                <select id="reg-role" required>
+                    <option value="" disabled selected></option>
+                    <option value="retail">Retail Buyer</option>
+                    <option value="wholesale">Wholesale Buyer</option>
+                </select>
+                <label>Account Type</label>
+                <i class="fas fa-store-alt input-icon"></i>
+            </div>
+            
+            <div id="reg-msg" class="auth-msg" style="display: none;"></div>
+            
+            <button type="submit" class="btn-primary">
+                <span class="btn-text">Sign Up Now</span>
+                <i class="fas fa-circle-notch loading-spinner"></i>
+            </button>
+        </form>
+    </div>
+    
+    <!-- Sign In Form -->
+    <div class="auth-form-wrapper sign-in-section">
+        <form id="loginForm">
+            <div class="brand-logo">
+                <i class="fas fa-shopping-basket"></i>
+                <span>Grocery Finance</span>
+            </div>
+            
+            <div class="form-header">
+                <h1>Welcome back</h1>
+                <p>Sign in to manage your orders and inventory.</p>
+            </div>
+            
+            <div class="input-group">
+                <input type="text" id="login-username" placeholder=" " required />
+                <label>Username</label>
+                <i class="fas fa-user input-icon"></i>
+            </div>
+            
+            <div class="input-group">
+                <input type="password" id="login-password" placeholder=" " required />
+                <label>Password</label>
+                <i class="fas fa-lock input-icon"></i>
+            </div>
+            
+            <div class="forgot-pass">
+                <a href="#">Forgot Password?</a>
+            </div>
+            
+            <div id="login-msg" class="auth-msg" style="display: none;"></div>
+            
+            <button type="submit" class="btn-primary">
+                <span class="btn-text">Secure Sign In</span>
+                <i class="fas fa-circle-notch loading-spinner"></i>
+            </button>
+
+            <div class="demo-box">
+                <p>Quick Login / Demo</p>
+                <div class="demo-tags">
+                    <div class="demo-tag" data-user="admin" data-pass="admin123">
+                        <i class="fas fa-user-shield" style="color:#2874f0;"></i> Admin
+                    </div>
+                    <div class="demo-tag" data-user="john_retail" data-pass="password123">
+                        <i class="fas fa-store" style="color:#2e7d32;"></i> Retail
+                    </div>
+                    <div class="demo-tag" data-user="bulk_buyer" data-pass="password123">
+                        <i class="fas fa-truck-loading" style="color:#fb641b;"></i> Wholesale
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+    
+    <!-- Overlay Layout -->
+    <div class="overlay-wrapper">
+        <div class="overlay">
+            <div class="overlay-panel overlay-left">
+                <h2>Already a member?</h2>
+                <p>Sign in with your account to access your personalized dashboard and track your orders.</p>
+                <button class="btn-ghost" id="signInBtn"><i class="fas fa-arrow-left"></i> &nbsp;Sign In</button>
+            </div>
+            <div class="overlay-panel overlay-right">
+                <h2>New to us?</h2>
+                <p>Join the largest grocery supply network and unlock exclusive wholesale pricing and analytics.</p>
+                <button class="btn-ghost" id="signUpBtn">Create Account &nbsp;<i class="fas fa-arrow-right"></i></button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    const API_BASE = "http://localhost:8000/api";
+
+    // Panel Swapping Logic
+    const signUpBtn = document.getElementById('signUpBtn');
+    const signInBtn = document.getElementById('signInBtn');
+    const authContainer = document.getElementById('auth-container');
+
+    signUpBtn.addEventListener('click', () => {
+        authContainer.classList.add("is-swapped");
+        hideMessages();
+    });
+
+    signInBtn.addEventListener('click', () => {
+        authContainer.classList.remove("is-swapped");
+        hideMessages();
+    });
+
+    // Demo Fillers
+    document.querySelectorAll('.demo-tag').forEach(tag => {
+        tag.addEventListener('click', () => {
+            document.getElementById('login-username').value = tag.getAttribute('data-user');
+            document.getElementById('login-password').value = tag.getAttribute('data-pass');
+            // Flash to indicate interaction
+            tag.style.transform = 'scale(0.95)';
+            setTimeout(() => tag.style.transform = '', 150);
+        });
+    });
+
+    // Utilities
+    function hideMessages() {
+        document.getElementById('reg-msg').style.display = 'none';
+        document.getElementById('login-msg').style.display = 'none';
+    }
+
+    function showMsg(elementId, text, isSuccess) {
+        const el = document.getElementById(elementId);
+        const icon = isSuccess ? '<i class="fas fa-check-circle"></i>' : '<i class="fas fa-exclamation-triangle"></i>';
+        el.innerHTML = `${icon} <span>${text}</span>`;
+        // Trigger reflow to restart animation
+        el.style.animation = 'none';
+        el.offsetHeight; 
+        el.style.animation = null;
+        
+        el.className = 'auth-msg ' + (isSuccess ? 'msg-success' : 'msg-error');
+        el.style.display = 'flex';
+    }
+
+    function toggleLoadingState(formId, isLoading) {
+        const textEl = document.querySelector(`#${formId} .btn-text`);
+        const spinnerEl = document.querySelector(`#${formId} .loading-spinner`);
+        if (isLoading) {
+            textEl.style.display = 'none';
+            spinnerEl.style.display = 'inline-block';
+        } else {
+            textEl.style.display = 'inline-block';
+            spinnerEl.style.display = 'none';
+        }
+    }
+
+    // Login Action
+    document.getElementById('loginForm').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        
+        const username = document.getElementById('login-username').value;
+        const password = document.getElementById('login-password').value;
+        
+        toggleLoadingState('loginForm', true);
+        document.getElementById('login-msg').style.display = 'none';
+
+        try {
+            const response = await fetch(`${API_BASE}/users/login`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ username, password })
+            });
+
+            if (response.ok) {
+                const data = await response.json();
+                localStorage.setItem('token', data.access_token);
+                localStorage.setItem('username', username);
+                
+                showMsg('login-msg', 'Redirecting to dashboard...', true);
+                setTimeout(() => { window.location.href = 'dashboard.html'; }, 800);
+            } else {
+                const errorData = await response.json();
+                showMsg('login-msg', errorData.detail || 'Invalid username or password', false);
+            }
+        } catch (error) {
+            showMsg('login-msg', 'Connection failed. Ensure server is running.', false);
+        } finally {
+            if (document.querySelector('#login-msg').classList.contains('msg-error')) {
+                toggleLoadingState('loginForm', false);
+            }
+        }
+    });
+
+    // Register Action
+    document.getElementById('registerForm').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        
+        const full_name = document.getElementById('reg-fullname').value;
+        const email = document.getElementById('reg-email').value;
+        const username = document.getElementById('reg-username').value;
+        const password = document.getElementById('reg-password').value;
+        const role = document.getElementById('reg-role').value;
+        
+        toggleLoadingState('registerForm', true);
+        document.getElementById('reg-msg').style.display = 'none';
+
+        try {
+            const response = await fetch(`${API_BASE}/users/register`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ username, email, password, full_name, role })
+            });
+
+            if (response.ok) {
+                showMsg('reg-msg', 'Account created! Please sign in.', true);
+                
+                // Auto switch back to login form
+                setTimeout(() => {
+                    toggleLoadingState('registerForm', false);
+                    authContainer.classList.remove("is-swapped");
+                    document.getElementById('login-username').value = username;
+                    document.getElementById('login-password').value = password;
+                    hideMessages();
+                }, 1500);
+            } else {
+                const errorData = await response.json();
+                let errMsg = typeof errorData.detail === 'string' ? errorData.detail : 'Registration failed';
+                showMsg('reg-msg', errMsg, false);
+                toggleLoadingState('registerForm', false);
+            }
+        } catch (error) {
+            showMsg('reg-msg', 'Network error. Please try again.', false);
+            toggleLoadingState('registerForm', false);
+        }
+    });
+</script>
+
+</body>
+</html>

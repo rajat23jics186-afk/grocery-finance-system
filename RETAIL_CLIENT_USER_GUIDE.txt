@@ -1,0 +1,534 @@
+╔════════════════════════════════════════════════════════════════════════════════════════════╗
+║                   🛍️  RETAIL CLIENT USER GUIDE                                            ║
+║            How to Use the Grocery Finance System as a Retail Customer                     ║
+╚════════════════════════════════════════════════════════════════════════════════════════════╝
+
+═══════════════════════════════════════════════════════════════════════════════════════════════
+📋 QUICK START (5 MINUTES)
+═══════════════════════════════════════════════════════════════════════════════════════════════
+
+Step 1: Start the Server
+───────────────────────
+1. Open Command Prompt or PowerShell
+2. Navigate to project folder:
+   $ cd "c:\Users\sanya\OneDrive\Desktop\projects\Grocery Finance System"
+
+3. Run the server:
+   $ python run.py
+   
+   ✅ You should see:
+      INFO:     Uvicorn running on http://127.0.0.1:8000
+      INFO:     Application startup complete
+
+4. Keep this window open (do NOT close it)
+
+
+Step 2: Log In as Retail Customer
+──────────────────────────────────
+1. Open your web browser (Chrome, Firefox, Safari, Edge)
+
+2. Go to login page:
+   🌐 http://localhost:8000/static/login.html
+
+3. Enter these credentials:
+   Username: john_retail
+   Password: password123
+
+4. Click "Login" button
+
+5. ✅ You'll see the main Dashboard!
+
+
+Step 3: Start Shopping!
+──────────────────────
+You're now logged in and can:
+• Browse products
+• View order history
+• Make new orders
+• Track payments
+• See dashboards & reports
+
+═══════════════════════════════════════════════════════════════════════════════════════════════
+🏠 MAIN DASHBOARD OVERVIEW
+═══════════════════════════════════════════════════════════════════════════════════════════════
+
+When you log in, you'll see the Main Dashboard with:
+
+┌─ LEFT SIDEBAR (Menu) ────────────────────────────────────────────────────────┐
+│                                                                                │
+│  📈 Dashboard          ← Shows overview & key metrics                         │
+│  📦 Products           ← Browse & search all available products              │
+│  🛒 Orders             ← View your order history                             │
+│  💳 Payments           ← Track payment status                                │
+│  📊 Reports            ← View business analytics (if enabled)                │
+│  🤖 AI Analytics       ← View ML-powered insights                            │
+│                                                                                │
+│  New in Sidebar:                                                              │
+│  📦 Inventory          ← Real-time stock levels                              │
+│  👥 Customer Analytics ← Customer insights                                   │
+│  🔮 Sales Forecast     ← Sales predictions                                   │
+│  📑 Advanced Reports    ← Detailed reports                                   │
+│                                                                                │
+└────────────────────────────────────────────────────────────────────────────────┘
+
+┌─ MAIN CONTENT AREA ──────────────────────────────────────────────────────────┐
+│                                                                                │
+│  TOP: Welcome Message & Logout Button                                        │
+│       "Welcome, john_retail | [Logout]"                                      │
+│                                                                                │
+│  STATS: 4 Key Metric Cards at top                                            │
+│  ┌──────────┐ ┌──────────┐ ┌──────────┐ ┌──────────┐                        │
+│  │ Orders   │ │ Revenue  │ │ Customers│ │ Complete │                        │
+│  │   15     │ │ $8,500   │ │    12    │ │   10     │                        │
+│  └──────────┘ └──────────┘ └──────────┘ └──────────┘                        │
+│                                                                                │
+│  CHARTS: 2 Visual Charts                                                     │
+│  [Sales by Category Chart] [Payment Status Chart]                            │
+│                                                                                │
+│  TABLE: Recent Orders                                                        │
+│  Shows your last 5 orders with status                                        │
+│                                                                                │
+└────────────────────────────────────────────────────────────────────────────────┘
+
+═══════════════════════════════════════════════════════════════════════════════════════════════
+🛍️  HOW TO BROWSE & ORDER PRODUCTS
+═══════════════════════════════════════════════════════════════════════════════════════════════
+
+Section 1: VIEW PRODUCTS
+────────────────────────
+1. Click "Products" in left sidebar
+
+2. See all available products in a table:
+   ┌──────┬──────────────────┬──────────┬──────────┬─────────────┐
+   │ ID   │ Name             │ Category │ Retail $ │ Wholesale $ │
+   ├──────┼──────────────────┼──────────┼──────────┼─────────────┤
+   │ #1   │ Organic Milk     │ Dairy    │ $3.99    │ $2.99       │
+   │ #2   │ Wheat Bread      │ Bakery   │ $4.49    │ $3.49       │
+   │ #3   │ Fresh Tomatoes   │ Produce  │ $2.99    │ $1.99       │
+   │ #4   │ Chicken Breast   │ Meat     │ $9.99    │ $7.99       │
+   │ #5   │ Cheddar Cheese   │ Dairy    │ $5.49    │ $4.49       │
+   └──────┴──────────────────┴──────────┴──────────┴─────────────┘
+
+3. As a RETAIL customer, you pay the RETAIL PRICE (right column)
+   💰 Example: Milk costs $3.99 (not $2.99 wholesale)
+
+
+Section 2: PLACE AN ORDER
+──────────────────────────
+1. Go to "Orders" in the sidebar
+
+2. Click "+ New Order" button (if available)
+
+3. Fill in order form:
+   - Select products from dropdown
+   - Enter quantity
+   - Click "Add Item"
+   - Repeat for more products
+
+4. See order summary:
+   Items:
+   • 2x Organic Milk @ $3.99 = $7.98
+   • 3x Wheat Bread @ $4.49 = $13.47
+   ──────────────────
+   Total: $21.45
+
+5. Click "Place Order" to confirm
+
+6. ✅ Order placed! You'll see confirmation
+
+
+Section 3: TRACK YOUR ORDERS
+─────────────────────────────
+1. Click "Orders" in sidebar
+
+2. See list of all your orders:
+   ┌────────┬──────────┬──────────┬────────────────┐
+   │ Order# │ Amount   │ Status   │ Last Updated   │
+   ├────────┼──────────┼──────────┼────────────────┤
+   │ #1     │ $250.00  │ Delivered│ 2 days ago     │
+   │ #2     │ $125.50  │ Shipped  │ Just now       │
+   │ #3     │ $500.00  │ Pending  │ 1 hour ago     │
+   └────────┴──────────┴──────────┴────────────────┘
+
+3. Status meanings:
+   🟢 DELIVERED     → Your order arrived
+   📦 SHIPPED       → On the way to you
+   ⏳ PENDING       → Getting prepared
+   ❌ CANCELLED     → Order was cancelled
+
+═══════════════════════════════════════════════════════════════════════════════════════════════
+💳 HOW TO MAKE PAYMENTS
+═══════════════════════════════════════════════════════════════════════════════════════════════
+
+Section 1: VIEW PAYMENT STATUS
+──────────────────────────────
+1. Click "Payments" in sidebar
+
+2. See all your payments:
+   ┌────────┬─────────┬──────────┬────────────┬────────────┐
+   │ Pay ID │ Order   │ Amount   │ Method     │ Status     │
+   ├────────┼─────────┼──────────┼────────────┼────────────┤
+   │ #1     │ Order#1 │ $250.00  │ Credit     │ ✓ Complete │
+   │ #2     │ Order#3 │ $500.00  │ Cash       │ ⏳ Pending  │
+   │ #3     │ Order#2 │ $125.50  │ UPI        │ ✓ Complete │
+   └────────┴─────────┴──────────┴────────────┴────────────┘
+
+3. Status meanings:
+   ✓ COMPLETED     → Payment received & confirmed
+   ⏳ PENDING       → Waiting for payment
+   ⚠️  PARTIAL      → Only part of amount paid
+   ❌ FAILED        → Payment couldn't process
+
+
+Section 2: PAYMENT METHODS
+──────────────────────────
+Available payment options:
+1. Credit Card (Visa, Mastercard, Amex)
+2. Debit Card
+3. UPI (Online transfers)
+4. Cash on Delivery
+5. Cheque
+
+═══════════════════════════════════════════════════════════════════════════════════════════════
+📊 UNDERSTANDING THE REPORTS & ANALYTICS
+═══════════════════════════════════════════════════════════════════════════════════════════════
+
+DASHBOARD TAB
+─────────────
+Shows live summary:
+  • Total Orders You Placed
+  • Total Amount Spent
+  • Number of Successful Deliveries
+  • Upcoming Orders
+
+Charts:
+  • What categories you buy most
+  • Payment status breakdown
+
+
+PRODUCTS TAB
+────────────
+Simple product list view:
+  • All available products
+  • Your purchase history with each
+  • Unit prices
+
+
+ORDERS TAB
+──────────
+Your complete order history:
+  • Every order you placed
+  • Current status
+  • Timeline
+  • Order details
+
+
+PAYMENTS TAB
+────────────
+Payment tracking:
+  • All payments made
+  • Outstanding amounts due
+  • Payment methods used
+  • Transaction history
+
+
+REPORTS TAB (Optional)
+──────────────────────
+Advanced business analytics:
+  • Sales trends (if you're tracking your own business)
+  • Inventory insights
+  • Financial summaries
+
+
+AI ANALYTICS TAB (Optional)
+───────────────────────────
+Machine learning insights:
+  • Predicted order trends
+  • Seasonal patterns
+  • Demand forecasting
+
+
+NEW: INVENTORY INTERFACE
+────────────────────────
+Click "Inventory" (opens in new tab)
+Shows:
+  • Current stock of all products
+  • Stock levels (Low/Medium/High)
+  • Product availability
+  • Reorder information
+
+
+NEW: CUSTOMER ANALYTICS
+───────────────────────
+Click "Customer Analytics" (opens in new tab)
+Shows:
+  • Your customer profile (if applicable)
+  • Purchasing patterns
+  • Spending insights
+  • Loyalty tier
+
+
+NEW: SALES FORECAST
+────────────────────
+Click "Sales Forecast" (opens in new tab)
+Shows:
+  • Predicted demand trends
+  • Revenue forecasts
+  • Best times to buy/sell
+  • Stock alerts
+
+
+NEW: ADVANCED REPORTS
+─────────────────────
+Click "Advanced Reports" (opens in new tab)
+Shows:
+  • Detailed sales analysis
+  • Payment summaries
+  • Inventory reports
+  • Financial statements
+
+═══════════════════════════════════════════════════════════════════════════════════════════════
+🔐 YOUR ACCOUNT INFORMATION
+═══════════════════════════════════════════════════════════════════════════════════════════════
+
+YOUR LOGIN DETAILS
+──────────────────
+Username: john_retail
+Password: password123
+Account Type: Retail Customer
+
+PRICING YOU PAY
+───────────────
+As a RETAIL customer, you get RETAIL PRICES:
+
+Product             Retail Price    Wholesale Price (not for you)
+─────────────────────────────────────────────────────────────────
+Organic Milk        $3.99          $2.99
+Wheat Bread         $4.49          $3.49
+Fresh Tomatoes      $2.99          $1.99
+Chicken Breast      $9.99          $7.99
+Cheddar Cheese      $5.49          $4.49
+Sourdough Bread     $6.99          $5.49
+Carrots             $1.99          $1.49
+Ground Beef         $8.99          $6.99
+Yogurt              $2.49          $1.99
+Rice                $3.99          $2.99
+
+Note: Wholesale prices are only for bulk buying customers
+
+
+SAMPLE PURCHASE SCENARIO
+────────────────────────
+Let's say you want to buy:
+  ✓ 2 bottles of Milk @ $3.99 = $7.98
+  ✓ 3 loaves of Bread @ $4.49 = $13.47
+  ✓ 5 lbs of Tomatoes @ $2.99 = $14.95
+  ✓ 1 pack of Chicken @ $9.99 = $9.99
+                          TOTAL = $46.39
+
+═══════════════════════════════════════════════════════════════════════════════════════════════
+⚠️  TROUBLESHOOTING - IF SOMETHING GOES WRONG
+═══════════════════════════════════════════════════════════════════════════════════════════════
+
+PROBLEM 1: "Cannot connect to server"
+─────────────────────────────────────
+Cause: Server is not running
+
+Solution:
+1. Open Command Prompt/PowerShell
+2. Go to project folder:
+   $ cd "c:\Users\sanya\OneDrive\Desktop\projects\Grocery Finance System"
+3. Start server:
+   $ python run.py
+4. Wait for "Application startup complete"
+5. Refresh your browser
+
+
+PROBLEM 2: "Login failed" or "Invalid credentials"
+────────────────────────────────────────────────────
+Cause: Wrong username or password
+
+Solution:
+1. Clear browser cache:
+   • Press Ctrl+Shift+Delete
+   • Clear all cookies & cache
+   • Click "Clear"
+
+2. Try login again with:
+   Username: john_retail
+   Password: password123
+
+3. Make sure CAPS LOCK is OFF
+4. Check for extra spaces in password
+
+
+PROBLEM 3: "Page not found" error
+──────────────────────────────────
+Cause: Wrong URL or server not responding
+
+Solution:
+1. Check server is still running (see Problem 1)
+2. Use correct URL:
+   http://localhost:8000/static/login.html
+   
+3. Try different browser
+4. Clear browser cache
+
+
+PROBLEM 4: "Charts not displaying"
+─────────────────────────────────
+Cause: JavaScript issue or data not loading
+
+Solution:
+1. Refresh the page (F5)
+2. Try different browser
+3. Check browser console for errors:
+   • Press F12
+   • Click "Console" tab
+   • Look for red error messages
+4. Clear browser cache
+
+
+PROBLEM 5: Data not updating
+───────────────────────────
+Cause: Stale cache or network issue
+
+Solution:
+1. Refresh page (Ctrl+F5)
+2. Wait 30 seconds for auto-refresh
+3. Check internet connection
+4. Logout and login again
+
+
+PROBLEM 6: "Permission denied" error
+─────────────────────────────────────
+Cause: Your account type doesn't have access
+
+Solution:
+1. You're using the right account (john_retail)
+2. Some advanced features are for admin only
+3. Contact system administrator if access needed
+
+═══════════════════════════════════════════════════════════════════════════════════════════════
+💡 TIPS & TRICKS FOR RETAIL CUSTOMERS
+═══════════════════════════════════════════════════════════════════════════════════════════════
+
+TIP 1: Check Stock Levels
+─────────────────────────
+Click "Inventory" link to see:
+  • What products are in stock (HIGH)
+  • What's running low (LOW/CRITICAL)
+  • Plan your orders accordingly
+
+
+TIP 2: View Forecasts
+──────────────────────
+Click "Sales Forecast" to see:
+  • Predicted demand for products
+  • Best times to order
+  • Upcoming stock issues
+
+
+TIP 3: Track Payments Easily
+─────────────────────────────
+In Payments tab:
+  • Green badges = Paid ✓
+  • Orange badges = Pending ⏳
+  • Click to see payment details
+
+
+TIP 4: Use Advanced Reports
+────────────────────────────
+Click "Advanced Reports" to:
+  • Export data to PDF/Excel
+  • Analyze your spending patterns
+  • Track your account performance
+
+
+TIP 5: Mobile Access
+──────────────────────
+Visit mobile dashboard:
+  💻 http://localhost:8000/static/mobile.html
+  
+  Perfect for:
+  • Quick order status checks
+  • Product browsing on the go
+  • Payment tracking
+  • Touch-friendly interface
+
+
+TIP 6: Organize Your Orders
+───────────────────────────
+In Orders section:
+  • Search by order number
+  • Filter by status
+  • Sort by date
+  • Export to CSV
+
+
+TIP 7: Save Favorite Products
+──────────────────────────────
+In Products tab:
+  • Click product name for details
+  • Note frequently purchased items
+  • Set up repeat orders
+
+
+TIP 8: Monitor Your Spending
+──────────────────────────────
+In Reports:
+  • See total spent this month
+  • Track spending trends
+  • Budget planning
+  • Category breakdowns
+
+═══════════════════════════════════════════════════════════════════════════════════════════════
+📞 CUSTOMER SUPPORT
+═══════════════════════════════════════════════════════════════════════════════════════════════
+
+For Technical Issues:
+  🔧 Check troubleshooting section above
+  🔧 Restart browser and try again
+  🔧 Clear browser cache and cookies
+  🔧 Try different browser
+
+For Account Issues:
+  👤 Email: support@groceryfinance.com
+  📞 Phone: 1-800-GROCERY
+  💬 Chat: Available during business hours
+
+For Product/Order Issues:
+  📦 Contact logistics team
+  🛒 Check order status in dashboard
+  💳 View payment status anytime
+
+═══════════════════════════════════════════════════════════════════════════════════════════════
+✅ COMPLETE CHECKLIST - YOU'RE READY!
+═══════════════════════════════════════════════════════════════════════════════════════════════
+
+Before you start using the system, make sure you have:
+
+  ☑ Python installed on your computer
+  ☑ Project folder downloaded/available
+  ☑ Latest browser (Chrome, Firefox, Safari, or Edge)
+  ☑ Internet connection (for API calls)
+  ☑ Your login credentials saved or noted
+  
+Ready to use:
+  ☑ Server running (python run.py)
+  ☑ Dashboard accessible
+  ☑ Can log in with john_retail / password123
+  ☑ Can see products, orders, and payments
+  ☑ Can place new orders
+  ☑ Can track payments
+  ☑ Can view reports and analytics
+
+═══════════════════════════════════════════════════════════════════════════════════════════════
+
+                    🎉 YOU'RE ALL SET! START SHOPPING! 🎉
+                 Follow this guide and enjoy the full system!
+
+═══════════════════════════════════════════════════════════════════════════════════════════════
+
+Questions? See the troubleshooting section or contact support.
+Happy shopping! 🛍️

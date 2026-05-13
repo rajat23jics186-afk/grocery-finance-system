@@ -1,0 +1,557 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>Mobile Dashboard - Grocery Finance</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js/dist/chart.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+            min-height: 100vh;
+            padding-bottom: 80px;
+            color: #333;
+        }
+        
+        .mobile-header {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 2px solid #667eea;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+        
+        .mobile-header h1 {
+            font-size: 20px;
+            color: #667eea;
+            margin: 0;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .mobile-header .user-info {
+            text-align: right;
+            font-size: 12px;
+            color: #666;
+        }
+        
+        .container-mobile {
+            max-width: 100%;
+            margin: 0 auto;
+            padding: 15px;
+        }
+        
+        .stat-card-mobile {
+            background: white;
+            padding: 15px;
+            border-radius: 12px;
+            margin-bottom: 12px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+            border-left: 4px solid #667eea;
+        }
+        
+        .stat-card-mobile .label {
+            font-size: 12px;
+            color: #999;
+            text-transform: uppercase;
+            margin-bottom: 5px;
+        }
+        
+        .stat-card-mobile .value {
+            font-size: 24px;
+            color: #667eea;
+            font-weight: 700;
+            margin-bottom: 3px;
+        }
+        
+        .stat-card-mobile .change {
+            font-size: 11px;
+            color: #6bcf7f;
+        }
+        
+        .section-mobile {
+            background: white;
+            padding: 15px;
+            border-radius: 12px;
+            margin-bottom: 15px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+        }
+        
+        .section-mobile h3 {
+            font-size: 14px;
+            color: #667eea;
+            margin-bottom: 12px;
+            padding-bottom: 8px;
+            border-bottom: 2px solid #f0f0f0;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .chart-container-mobile {
+            position: relative;
+            height: 200px;
+            margin-bottom: 10px;
+        }
+        
+        .quick-stats {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+        
+        .quick-stat {
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);
+            padding: 12px;
+            border-radius: 8px;
+            text-align: center;
+            border: 1px solid #e0e0e0;
+        }
+        
+        .quick-stat-label {
+            font-size: 10px;
+            color: #999;
+            text-transform: uppercase;
+            margin-bottom: 4px;
+        }
+        
+        .quick-stat-value {
+            font-size: 18px;
+            color: #667eea;
+            font-weight: 700;
+        }
+        
+        .mobile-list {
+            list-style: none;
+        }
+        
+        .mobile-list-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 0;
+            border-bottom: 1px solid #f0f0f0;
+        }
+        
+        .mobile-list-item:last-child {
+            border-bottom: none;
+        }
+        
+        .mobile-list-item-title {
+            font-size: 13px;
+            color: #333;
+            font-weight: 600;
+        }
+        
+        .mobile-list-item-value {
+            font-size: 13px;
+            color: #667eea;
+            font-weight: 700;
+        }
+        
+        .status-badge-mobile {
+            display: inline-block;
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-size: 10px;
+            font-weight: 600;
+        }
+        
+        .badge-success {
+            background: #d4edda;
+            color: #155724;
+        }
+        
+        .badge-warning {
+            background: #fff3cd;
+            color: #856404;
+        }
+        
+        .badge-danger {
+            background: #f8d7da;
+            color: #721c24;
+        }
+        
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: white;
+            border-top: 2px solid #f0f0f0;
+            display: flex;
+            justify-content: space-around;
+            padding: 0;
+            z-index: 99;
+            box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.1);
+        }
+        
+        .nav-item-mobile {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 8px 0;
+            cursor: pointer;
+            border-radius: 0;
+            background: transparent;
+            border: none;
+            text-decoration: none;
+            color: #999;
+            font-size: 11px;
+            transition: all 0.2s;
+            -webkit-user-select: none;
+            user-select: none;
+        }
+        
+        .nav-item-mobile:hover,
+        .nav-item-mobile.active {
+            color: #667eea;
+            background: #f8f9fa;
+        }
+        
+        .nav-item-mobile i {
+            font-size: 20px;
+            margin-bottom: 2px;
+        }
+        
+        .alert-mobile {
+            background: #d4edda;
+            color: #155724;
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            font-size: 12px;
+            border-left: 4px solid #6bcf7f;
+        }
+        
+        @media (max-width: 480px) {
+            .mobile-header h1 {
+                font-size: 18px;
+            }
+            
+            .container-mobile {
+                padding: 12px;
+            }
+            
+            .stat-card-mobile .value {
+                font-size: 20px;
+            }
+            
+            .quick-stats {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+        
+        /* Safe area for notch */
+        @supports (padding: max(0px)) {
+            .mobile-header {
+                padding-top: max(15px, env(safe-area-inset-top));
+                padding-left: max(20px, env(safe-area-inset-left));
+                padding-right: max(20px, env(safe-area-inset-right));
+            }
+            
+            body {
+                padding-bottom: max(80px, calc(80px + env(safe-area-inset-bottom)));
+            }
+            
+            .bottom-nav {
+                padding-bottom: max(0, env(safe-area-inset-bottom));
+            }
+        }
+    </style>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        body { font-family: 'Inter', sans-serif !important; background: transparent !important; }
+        body::before {
+            content: ''; position: fixed; top: -20px; left: -20px; right: -20px; bottom: -20px;
+            background: url('https://images.unsplash.com/photo-1542838132-92c53300491e?auto=format&fit=crop&q=80&w=1920') center/cover no-repeat;
+            filter: blur(12px) brightness(0.7); z-index: -10;
+        }
+        .container, .container-fluid, .container-main, .card, .stat-card, .section, .header, .sidebar, .metric-card {
+            background: rgba(255, 255, 255, 0.88) !important;
+            backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 255, 255, 0.6) !important;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.15) !important;
+            border-radius: 12px !important;
+        }
+        .header h1, h2 i, .stat-value, .metric-value { color: #2874f0 !important; }
+        .btn-primary-custom, .btn-primary, .btn-submit, .btn-edit { background: #fb641b !important; color: white !important; border: none !important; box-shadow: 0 4px 10px rgba(251,100,27,0.3) !important; }
+        .btn-primary-custom:hover, .btn-primary:hover, .btn-submit:hover, .btn-edit:hover { background: #e05814 !important; transform: translateY(-2px); }
+        .navbar { background: rgba(40, 116, 240, 0.9) !important; backdrop-filter: blur(10px); border-bottom: 1px solid rgba(255,255,255,0.2) !important; }
+        .nav-link { color: #555 !important; font-weight: 500 !important; }
+        .nav-link.active { background-color: rgba(40, 116, 240, 0.1) !important; border-left-color: #2874f0 !important; color: #2874f0 !important; border-radius: 0 8px 8px 0; }
+        .nav-link:hover { color: #2874f0 !important; }
+        table thead th { background: rgba(40, 116, 240, 0.1) !important; color: #2874f0 !important; border-bottom: 2px solid #2874f0 !important; }
+        .navbar-brand { color: #fff !important; }
+        .text-light { color: #fff !important; }
+    </style>
+</head>
+<body>
+    <div class="mobile-header">
+        <h1>
+            <i class="bi bi-shop"></i>
+            Grocery Finance
+        </h1>
+        <div class="user-info">
+            <div id="userName">Loading...</div>
+            <div style="font-size: 10px;">Admin</div>
+        </div>
+    </div>
+    
+    <div class="container-mobile">
+        <div class="alert-mobile">
+            <i class="bi bi-info-circle"></i> 
+            Welcome to your mobile dashboard. Swipe through sections below.
+        </div>
+        
+        <!-- Quick Stats -->
+        <div class="quick-stats">
+            <div class="quick-stat">
+                <div class="quick-stat-label">Total Revenue</div>
+                <div class="quick-stat-value" id="totalRev">$8.5K</div>
+            </div>
+            <div class="quick-stat">
+                <div class="quick-stat-label">Orders</div>
+                <div class="quick-stat-value" id="totalOrders">15</div>
+            </div>
+            <div class="quick-stat">
+                <div class="quick-stat-label">Customers</div>
+                <div class="quick-stat-value" id="totalCust">12</div>
+            </div>
+            <div class="quick-stat">
+                <div class="quick-stat-label">Completed</div>
+                <div class="quick-stat-value" id="completedOrders">10</div>
+            </div>
+        </div>
+        
+        <!-- Dashboard Stats -->
+        <div id="dashboardStats"></div>
+        
+        <!-- Recent Orders -->
+        <div class="section-mobile">
+            <h3>
+                <i class="bi bi-bag-check"></i>
+                Recent Orders
+            </h3>
+            <ul class="mobile-list" id="recentOrders">
+                <li class="mobile-list-item">
+                    <div class="mobile-list-item-title">Order loading...</div>
+                </li>
+            </ul>
+        </div>
+        
+        <!-- Sales Chart -->
+        <div class="section-mobile">
+            <h3>
+                <i class="bi bi-bar-chart"></i>
+                Sales by Category
+            </h3>
+            <div class="chart-container-mobile">
+                <canvas id="salesChart"></canvas>
+            </div>
+        </div>
+        
+        <!-- Quick Actions -->
+        <div class="section-mobile">
+            <h3>
+                <i class="bi bi-lightning-charge"></i>
+                Quick Links
+            </h3>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+                <a href="inventory.html" style="padding: 12px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border-radius: 8px; text-align: center; text-decoration: none; font-size: 12px; font-weight: 600;">
+                    <i class="bi bi-boxes"></i><br>Inventory
+                </a>
+                <a href="analytics.html" style="padding: 12px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border-radius: 8px; text-align: center; text-decoration: none; font-size: 12px; font-weight: 600;">
+                    <i class="bi bi-people"></i><br>Customers
+                </a>
+                <a href="forecast.html" style="padding: 12px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border-radius: 8px; text-align: center; text-decoration: none; font-size: 12px; font-weight: 600;">
+                    <i class="bi bi-graph-up"></i><br>Forecast
+                </a>
+                <a href="reports.html" style="padding: 12px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border-radius: 8px; text-align: center; text-decoration: none; font-size: 12px; font-weight: 600;">
+                    <i class="bi bi-file-text"></i><br>Reports
+                </a>
+            </div>
+        </div>
+        
+        <!-- Key Metrics -->
+        <div class="section-mobile">
+            <h3>
+                <i class="bi bi-speedometer2"></i>
+                Key Metrics
+            </h3>
+            <ul class="mobile-list">
+                <li class="mobile-list-item">
+                    <div class="mobile-list-item-title">Conversion Rate</div>
+                    <div class="mobile-list-item-value">3.2%</div>
+                </li>
+                <li class="mobile-list-item">
+                    <div class="mobile-list-item-title">Avg Order Value</div>
+                    <div class="mobile-list-item-value">$56.67</div>
+                </li>
+                <li class="mobile-list-item">
+                    <div class="mobile-list-item-title">Stock Turnover</div>
+                    <div class="mobile-list-item-value">3.2x</div>
+                </li>
+                <li class="mobile-list-item">
+                    <div class="mobile-list-item-title">Payment Success</div>
+                    <div class="mobile-list-item-value">
+                        <span class="status-badge-mobile badge-success">100%</span>
+                    </div>
+                </li>
+                <li class="mobile-list-item">
+                    <div class="mobile-list-item-title">Low Stock Items</div>
+                    <div class="mobile-list-item-value">
+                        <span class="status-badge-mobile badge-warning">8</span>
+                    </div>
+                </li>
+                <li class="mobile-list-item">
+                    <div class="mobile-list-item-title">Repeat Rate</div>
+                    <div class="mobile-list-item-value">67%</div>
+                </li>
+            </ul>
+        </div>
+        
+        <div style="height: 20px;"></div>
+    </div>
+    
+    <!-- Bottom Navigation -->
+    <div class="bottom-nav">
+        <button class="nav-item-mobile active" onclick="switchTab('dashboard')">
+            <i class="bi bi-house-door"></i>
+            Dashboard
+        </button>
+        <button class="nav-item-mobile" onclick="switchTab('orders')">
+            <i class="bi bi-bag"></i>
+            Orders
+        </button>
+        <button class="nav-item-mobile" onclick="switchTab('products')">
+            <i class="bi bi-box"></i>
+            Products
+        </button>
+        <button class="nav-item-mobile" onclick="switchTab('stats')">
+            <i class="bi bi-graph-up"></i>
+            Stats
+        </button>
+        <button class="nav-item-mobile" onclick="logout()">
+            <i class="bi bi-door-left"></i>
+            Logout
+        </button>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        const API_BASE = "http://localhost:8000/api";
+        const token = localStorage.getItem('token');
+        const username = localStorage.getItem('username');
+        
+        if (!token) {
+            window.location.href = 'login.html';
+        }
+        
+        document.getElementById('userName').textContent = username || 'User';
+        
+        // Load dashboard data
+        async function loadDashboard() {
+            try {
+                const response = await fetch(`${API_BASE}/reports/dashboard`, {
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+                const data = await response.json();
+                
+                document.getElementById('totalRev').textContent = '$' + (data.total_revenue || '8.5K');
+                document.getElementById('totalOrders').textContent = data.total_orders || 15;
+                document.getElementById('totalCust').textContent = data.unique_customers || 12;
+                document.getElementById('completedOrders').textContent = data.completed_orders || 10;
+                
+                loadRecentOrders();
+                loadChart();
+            } catch (error) {
+                console.error('Error loading dashboard:', error);
+            }
+        }
+        
+        function loadRecentOrders() {
+            const html = `
+                <li class="mobile-list-item">
+                    <div class="mobile-list-item-title">#1 - Milk & Bread</div>
+                    <span class="status-badge-mobile badge-success">Delivered</span>
+                </li>
+                <li class="mobile-list-item">
+                    <div class="mobile-list-item-title">#2 - Fresh Produce</div>
+                    <span class="status-badge-mobile badge-warning">Pending</span>
+                </li>
+                <li class="mobile-list-item">
+                    <div class="mobile-list-item-title">#3 - Chicken & Meat</div>
+                    <span class="status-badge-mobile badge-success">Shipped</span>
+                </li>
+            `;
+            document.getElementById('recentOrders').innerHTML = html;
+        }
+        
+        function loadChart() {
+            const ctx = document.getElementById('salesChart').getContext('2d');
+            new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: ['Dairy', 'Bakery', 'Produce', 'Meat'],
+                    datasets: [{
+                        label: 'Sales ($)',
+                        data: [1800, 1520, 960, 2240],
+                        backgroundColor: ['#667eea', '#764ba2', '#6bcf7f', '#ffd93d'],
+                        borderRadius: 6
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false }
+                    },
+                    scales: {
+                        y: { beginAtZero: true }
+                    }
+                }
+            });
+        }
+        
+        function switchTab(tab) {
+            // Update active nav button
+            document.querySelectorAll('.nav-item-mobile').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.target.closest('.nav-item-mobile').classList.add('active');
+            
+            // In a real app, this would load different content
+            if (tab === 'orders') alert('Orders page coming soon');
+            if (tab === 'products') alert('Products page coming soon');
+            if (tab === 'stats') alert('Stats page coming soon');
+        }
+        
+        function logout() {
+            localStorage.removeItem('token');
+            window.location.href = 'login.html';
+        }
+        
+        document.addEventListener('DOMContentLoaded', loadDashboard);
+    </script>
+</body>
+</html>

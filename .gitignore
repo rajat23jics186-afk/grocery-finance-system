@@ -1,0 +1,39 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+*.egg-info/
+dist/
+build/
+
+# Virtual environments
+venv/
+env/
+.env
+.venv/
+
+# Database files (Render has its own persistent disk)
+data/*.db
+
+# Environment variables
+.env
+.env.local
+
+# IDE
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Uploads (user-generated content)
+uploads/
+
+# AI Models (large binary files)
+models/
+
+# Logs
+*.log

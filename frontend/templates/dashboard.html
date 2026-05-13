@@ -1,0 +1,671 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - Grocery Finance System</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="/static/css/dashboard.css" rel="stylesheet">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        body { font-family: 'Inter', sans-serif !important; background: transparent !important; }
+        body::before {
+            content: ''; position: fixed; top: -20px; left: -20px; right: -20px; bottom: -20px;
+            background: url('https://images.unsplash.com/photo-1542838132-92c53300491e?auto=format&fit=crop&q=80&w=1920') center/cover no-repeat;
+            filter: blur(12px) brightness(0.7); z-index: -10;
+        }
+        .container, .container-fluid, .container-main, .card, .stat-card, .section, .header, .sidebar, .metric-card {
+            background: rgba(255, 255, 255, 0.88) !important;
+            backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 255, 255, 0.6) !important;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.15) !important;
+            border-radius: 12px !important;
+        }
+        .header h1, h2 i, .stat-value, .metric-value { color: #2874f0 !important; }
+        .btn-primary-custom, .btn-primary, .btn-submit, .btn-edit { background: #fb641b !important; color: white !important; border: none !important; box-shadow: 0 4px 10px rgba(251,100,27,0.3) !important; }
+        .btn-primary-custom:hover, .btn-primary:hover, .btn-submit:hover, .btn-edit:hover { background: #e05814 !important; transform: translateY(-2px); }
+        .navbar { background: rgba(40, 116, 240, 0.9) !important; backdrop-filter: blur(10px); border-bottom: 1px solid rgba(255,255,255,0.2) !important; }
+        .nav-link { color: #555 !important; font-weight: 500 !important; }
+        .nav-link.active { background-color: rgba(40, 116, 240, 0.1) !important; border-left-color: #2874f0 !important; color: #2874f0 !important; border-radius: 0 8px 8px 0; }
+        .nav-link:hover { color: #2874f0 !important; }
+        table thead th { background: rgba(40, 116, 240, 0.1) !important; color: #2874f0 !important; border-bottom: 2px solid #2874f0 !important; }
+        .navbar-brand { color: #fff !important; }
+        .text-light { color: #fff !important; }
+    </style>
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <nav class="navbar navbar-dark bg-dark sticky-top">
+        <div class="container-fluid">
+            <span class="navbar-brand mb-0 h1">
+                <i class="fas fa-store"></i> Grocery Finance System
+            </span>
+            <div class="d-flex align-items-center">
+                <span class="text-light me-3">
+                    <i class="fas fa-user-circle"></i> <span id="userName">User</span>
+                </span>
+                <button class="btn btn-outline-light btn-sm" onclick="logout()">
+                    <i class="fas fa-sign-out-alt"></i> Logout
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container-fluid">
+        <div class="row">
+            <!-- Sidebar -->
+            <nav id="sidebar" class="col-md-2 d-md-block bg-light sidebar">
+                <div class="position-sticky pt-3">
+                    <ul class="nav flex-column">
+                        <li class="nav-item">
+                            <a class="nav-link active" href="#" onclick="loadPage('dashboard', event)">
+                                <i class="fas fa-chart-line"></i> Dashboard
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#" onclick="loadPage('products', event)">
+                                <i class="fas fa-box"></i> Products
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#" onclick="loadPage('orders', event)">
+                                <i class="fas fa-shopping-cart"></i> Orders
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#" onclick="loadPage('payments', event)">
+                                <i class="fas fa-credit-card"></i> Payments
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="place-order.html" target="_blank" title="New Window">
+                                <i class="fas fa-cart-plus"></i> Place Order
+                            </a>
+                        </li>
+                        <hr class="my-2">
+                        <li class="nav-item">
+                            <a class="nav-link" href="inventory.html" target="_blank" title="New Window">
+                                <i class="fas fa-boxes"></i> Inventory
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="analytics.html" target="_blank" title="New Window">
+                                <i class="fas fa-users"></i> Customers
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="forecast.html" target="_blank" title="New Window">
+                                <i class="fas fa-crystal-ball"></i> Forecast
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="reports.html" target="_blank" title="New Window">
+                                <i class="fas fa-file-chart-line"></i> Reports
+                            </a>
+                        </li>
+                        <hr class="my-2">
+                        <li class="nav-item">
+                            <a class="nav-link" href="#" onclick="loadPage('ai-analytics', event)">
+                                <i class="fas fa-brain"></i> AI Analytics
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+
+            <!-- Main Content -->
+            <main class="col-md-10 ms-sm-auto px-md-4">
+                <div id="content" class="mt-4">
+                    <!-- Content will be loaded here -->
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        const API_BASE = "http://localhost:8000/api";
+        let currentToken = null;
+
+        // Initialize dashboard
+        document.addEventListener('DOMContentLoaded', function() {
+            checkAuth();
+            loadPage('dashboard');
+        });
+
+        // Check authentication
+        function checkAuth() {
+            const token = localStorage.getItem('token');
+            const username = localStorage.getItem('username');
+            
+            if (!token || !username) {
+                window.location.href = 'login.html';
+                return;
+            }
+            
+            currentToken = token;
+            document.getElementById('userName').textContent = username;
+        }
+
+        // Load page content
+        function loadPage(page, event) {
+            if (event) event.preventDefault();
+            
+            const content = document.getElementById('content');
+            
+            // Update active nav link
+            document.querySelectorAll('.nav-link').forEach(link => {
+                link.classList.remove('active');
+            });
+            if (event && event.target.closest('.nav-link')) {
+                event.target.closest('.nav-link').classList.add('active');
+            }
+            
+            switch(page) {
+                case 'dashboard':
+                    loadDashboard();
+                    break;
+                case 'products':
+                    loadProducts();
+                    break;
+                case 'orders':
+                    loadOrders();
+                    break;
+                case 'payments':
+                    loadPayments();
+                    break;
+                case 'reports':
+                    loadReports();
+                    break;
+                case 'analytics':
+                    loadAnalytics();
+                    break;
+            }
+        }
+
+        // Load Dashboard
+        function loadDashboard() {
+            const content = document.getElementById('content');
+            
+            content.innerHTML = `
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <h2><i class="fas fa-chart-line"></i> Dashboard Overview</h2>
+                    <div class="text-muted">Last updated: <span id="lastUpdate">${new Date().toLocaleTimeString()}</span></div>
+                </div>
+
+                <div class="row mb-4">
+                    <div class="col-md-3">
+                        <div class="card stat-card">
+                            <div class="card-body">
+                                <div class="d-flex justify-content-between align-items-start">
+                                    <div>
+                                        <p class="text-muted mb-1">Total Orders</p>
+                                        <h3 class="mb-0" id="totalOrders">0</h3>
+                                    </div>
+                                    <i class="fas fa-shopping-cart text-primary" style="font-size: 2rem;"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-3">
+                        <div class="card stat-card">
+                            <div class="card-body">
+                                <div class="d-flex justify-content-between align-items-start">
+                                    <div>
+                                        <p class="text-muted mb-1">Total Revenue</p>
+                                        <h3 class="mb-0" id="totalRevenue">$0</h3>
+                                    </div>
+                                    <i class="fas fa-dollar-sign text-success" style="font-size: 2rem;"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-3">
+                        <div class="card stat-card">
+                            <div class="card-body">
+                                <div class="d-flex justify-content-between align-items-start">
+                                    <div>
+                                        <p class="text-muted mb-1">Total Customers</p>
+                                        <h3 class="mb-0" id="totalCustomers">0</h3>
+                                    </div>
+                                    <i class="fas fa-users text-warning" style="font-size: 2rem;"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-3">
+                        <div class="card stat-card">
+                            <div class="card-body">
+                                <div class="d-flex justify-content-between align-items-start">
+                                    <div>
+                                        <p class="text-muted mb-1">Completed Orders</p>
+                                        <h3 class="mb-0" id="completedOrders">0</h3>
+                                    </div>
+                                    <i class="fas fa-check-circle text-info" style="font-size: 2rem;"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="card">
+                            <div class="card-header bg-primary text-white">
+                                <i class="fas fa-chart-bar"></i> Sales by Category
+                            </div>
+                            <div class="card-body">
+                                <canvas id="categoryChart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <div class="card">
+                            <div class="card-header bg-primary text-white">
+                                <i class="fas fa-pie-chart"></i> Payment Status Distribution
+                            </div>
+                            <div class="card-body">
+                                <canvas id="paymentChart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row mt-4">
+                    <div class="col-md-12">
+                        <div class="card">
+                            <div class="card-header bg-primary text-white">
+                                <i class="fas fa-list"></i> Recent Orders
+                            </div>
+                            <div class="card-body">
+                                <div id="recentOrdersTable"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            // Load metrics
+            fetch(`${API_BASE}/reports/dashboard-summary`)
+                .then(r => r.json())
+                .then(data => {
+                    document.getElementById('totalOrders').textContent = data.total_orders;
+                    document.getElementById('totalRevenue').textContent = `$${data.total_revenue.toFixed(2)}`;
+                    document.getElementById('totalCustomers').textContent = data.total_customers;
+                    document.getElementById('completedOrders').textContent = data.completed_orders;
+                    
+                    loadDashboardCharts();
+                    loadRecentOrders();
+                })
+                .catch(err => {
+                    console.error('Error loading dashboard:', err);
+                    document.getElementById('content').innerHTML += `<div class="alert alert-warning mt-3">Unable to load data. Make sure the server is running on http://localhost:8000</div>`;
+                });
+        }
+
+        // Load Dashboard Charts
+        function loadDashboardCharts() {
+            // Category Chart
+            const categoryCtx = document.getElementById('categoryChart');
+            if (categoryCtx) {
+                new Chart(categoryCtx, {
+                    type: 'bar',
+                    data: {
+                        labels: ['Dairy', 'Bakery', 'Produce', 'Meat', 'Pantry'],
+                        datasets: [{
+                            label: 'Sales ($)',
+                            data: [1200, 1900, 800, 2500, 1100],
+                            backgroundColor: [
+                                '#3498db', '#e74c3c', '#2ecc71', '#f39c12', '#9b59b6'
+                            ],
+                            borderRadius: 5
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        plugins: {
+                            legend: { display: true }
+                        },
+                        scales: {
+                            y: { beginAtZero: true }
+                        }
+                    }
+                });
+            }
+
+            // Payment Status Chart
+            const paymentCtx = document.getElementById('paymentChart');
+            if (paymentCtx) {
+                new Chart(paymentCtx, {
+                    type: 'doughnut',
+                    data: {
+                        labels: ['Completed', 'Pending', 'Partial'],
+                        datasets: [{
+                            data: [65, 25, 10],
+                            backgroundColor: ['#2ecc71', '#f39c12', '#e74c3c']
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        plugins: {
+                            legend: { position: 'bottom' }
+                        }
+                    }
+                });
+            }
+        }
+
+        // Load Recent Orders
+        function loadRecentOrders() {
+            fetch(`${API_BASE}/orders/`)
+                .then(r => r.json())
+                .then(orders => {
+                    const recent = orders.slice(0, 5);
+                    const html = `
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Order ID</th>
+                                    <th>Customer</th>
+                                    <th>Amount</th>
+                                    <th>Status</th>
+                                    <th>Payment</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                ${recent.map(order => `
+                                    <tr>
+                                        <td>#${order.id}</td>
+                                        <td>Customer ${order.customer_id}</td>
+                                        <td>$${order.total_amount.toFixed(2)}</td>
+                                        <td><span class="badge bg-primary">${order.order_status}</span></td>
+                                        <td><span class="badge bg-success">${order.payment_status}</span></td>
+                                    </tr>
+                                `).join('')}
+                            </tbody>
+                        </table>
+                    `;
+                    document.getElementById('recentOrdersTable').innerHTML = html;
+                });
+        }
+
+        // Load Products
+        function loadProducts() {
+            const content = document.getElementById('content');
+            content.innerHTML = `
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <h2><i class="fas fa-box"></i> Products</h2>
+                    <button class="btn btn-primary" onclick="alert('Add product feature coming soon!')">
+                        <i class="fas fa-plus"></i> Add Product
+                    </button>
+                </div>
+                <div class="card">
+                    <div class="card-body" id="productsTable"></div>
+                </div>
+            `;
+            
+            fetch(`${API_BASE}/products/`)
+                .then(r => r.json())
+                .then(products => {
+                    const html = `
+                        <table class="table table-hover">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>Product ID</th>
+                                    <th>Name</th>
+                                    <th>Category</th>
+                                    <th>Retail Price</th>
+                                    <th>Wholesale Price</th>
+                                    <th>Stock</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                ${products.map(p => `
+                                    <tr>
+                                        <td>#${p.id}</td>
+                                        <td><strong>${p.name}</strong></td>
+                                        <td><span class="badge bg-info">${p.category}</span></td>
+                                        <td>$${p.retail_price.toFixed(2)}</td>
+                                        <td>$${p.wholesale_price.toFixed(2)}</td>
+                                        <td><strong>${p.quantity_in_stock}</strong></td>
+                                        <td>
+                                            <button class="btn btn-sm btn-info">Edit</button>
+                                            <button class="btn btn-sm btn-danger">Delete</button>
+                                        </td>
+                                    </tr>
+                                `).join('')}
+                            </tbody>
+                        </table>
+                    `;
+                    document.getElementById('productsTable').innerHTML = html;
+                });
+        }
+
+        // Load Orders
+        function loadOrders() {
+            const content = document.getElementById('content');
+            content.innerHTML = `
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <h2><i class="fas fa-shopping-cart"></i> Orders</h2>
+                    <button class="btn btn-primary" onclick="alert('New order feature coming soon!')">
+                        <i class="fas fa-plus"></i> New Order
+                    </button>
+                </div>
+                <div class="card">
+                    <div class="card-body" id="ordersTable"></div>
+                </div>
+            `;
+            
+            fetch(`${API_BASE}/orders/`)
+                .then(r => r.json())
+                .then(orders => {
+                    const html = `
+                        <table class="table table-hover">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>Order ID</th>
+                                    <th>Customer ID</th>
+                                    <th>Total Amount</th>
+                                    <th>Order Status</th>
+                                    <th>Payment Status</th>
+                                    <th>Date</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                ${orders.map(o => `
+                                    <tr>
+                                        <td>#${o.id}</td>
+                                        <td>${o.customer_id}</td>
+                                        <td><strong>$${o.total_amount.toFixed(2)}</strong></td>
+                                        <td>
+                                            <span class="badge ${
+                                                o.order_status === 'delivered' ? 'bg-success' :
+                                                o.order_status === 'pending' ? 'bg-warning' :
+                                                'bg-secondary'
+                                            }">${o.order_status}</span>
+                                        </td>
+                                        <td>
+                                            <span class="badge ${
+                                                o.payment_status === 'completed' ? 'bg-success' :
+                                                o.payment_status === 'partial' ? 'bg-warning' :
+                                                'bg-danger'
+                                            }">${o.payment_status}</span>
+                                        </td>
+                                        <td>${new Date(o.order_date).toLocaleDateString()}</td>
+                                    </tr>
+                                `).join('')}
+                            </tbody>
+                        </table>
+                    `;
+                    document.getElementById('ordersTable').innerHTML = html;
+                });
+        }
+
+        // Load Payments
+        function loadPayments() {
+            const content = document.getElementById('content');
+            content.innerHTML = `
+                <h2><i class="fas fa-credit-card"></i> Payments</h2>
+                <div class="card mt-4">
+                    <div class="card-body" id="paymentsTable"></div>
+                </div>
+            `;
+            
+            fetch(`${API_BASE}/payments/`)
+                .then(r => r.json())
+                .then(payments => {
+                    const html = `
+                        <table class="table table-hover">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>Payment ID</th>
+                                    <th>Order ID</th>
+                                    <th>Customer ID</th>
+                                    <th>Amount</th>
+                                    <th>Payment Method</th>
+                                    <th>Status</th>
+                                    <th>Date</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                ${payments.map(p => `
+                                    <tr>
+                                        <td>#${p.id}</td>
+                                        <td>#${p.order_id}</td>
+                                        <td>${p.customer_id}</td>
+                                        <td><strong>$${p.amount.toFixed(2)}</strong></td>
+                                        <td><span class="badge bg-secondary">${p.payment_method}</span></td>
+                                        <td><span class="badge bg-success">${p.status}</span></td>
+                                        <td>${new Date(p.payment_date).toLocaleDateString()}</td>
+                                    </tr>
+                                `).join('')}
+                            </tbody>
+                        </table>
+                    `;
+                    document.getElementById('paymentsTable').innerHTML = html;
+                });
+        }
+
+        // Load Reports
+        function loadReports() {
+            const content = document.getElementById('content');
+            content.innerHTML = `
+                <h2><i class="fas fa-file-chart-line"></i> Sales Reports</h2>
+                
+                <div class="row mt-4">
+                    <div class="col-md-6">
+                        <div class="card">
+                            <div class="card-header bg-primary text-white">
+                                Retail vs Wholesale
+                            </div>
+                            <div class="card-body" id="retailWholesale"></div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-6">
+                        <div class="card">
+                            <div class="card-header bg-primary text-white">
+                                Sales by Category
+                            </div>
+                            <div class="card-body" id="salesByCategory"></div>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            fetch(`${API_BASE}/reports/retail-vs-wholesale`)
+                .then(r => r.json())
+                .then(data => {
+                    const html = `
+                        <p><strong>Retail Revenue:</strong> <span class="float-end">$${data.retail_revenue.toFixed(2)}</span></p>
+                        <p><strong>Wholesale Revenue:</strong> <span class="float-end">$${data.wholesale_revenue.toFixed(2)}</span></p>
+                        <hr>
+                        <p><strong>Total Revenue:</strong> <span class="float-end" style="font-size: 1.3rem;">$${data.total_revenue.toFixed(2)}</span></p>
+                    `;
+                    document.getElementById('retailWholesale').innerHTML = html;
+                });
+        }
+
+        // Load Analytics
+        function loadAnalytics() {
+            const content = document.getElementById('content');
+            content.innerHTML = `
+                <h2><i class="fas fa-brain"></i> AI Analytics</h2>
+                <div class="row mt-4">
+                    <div class="col-md-6">
+                        <div class="card">
+                            <div class="card-header bg-success text-white">
+                                <i class="fas fa-chart-line"></i> Data Science Lab
+                            </div>
+                            <div class="card-body">
+                                <h5>Customer Segmentation</h5>
+                                <p>K-Means clustering analysis for customer behavior</p>
+                                <h5 class="mt-3">Correlation Analysis</h5>
+                                <p>Product relationship analysis and trends</p>
+                                <button class="btn btn-success btn-sm" onclick="alert('Run: streamlit run dashboards/streamlit_app.py')">
+                                    Launch Streamlit Dashboard
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-6">
+                        <div class="card">
+                            <div class="card-header bg-info text-white">
+                                <i class="fas fa-network-wired"></i> Neural Networks Lab
+                            </div>
+                            <div class="card-body">
+                                <h5>Demand Prediction</h5>
+                                <p>MLP neural network for demand forecasting</p>
+                                <h5 class="mt-3">Stock Alerts</h5>
+                                <p>Automatic inventory reorder system</p>
+                                <button class="btn btn-info btn-sm" onclick="alert('Feature: Interactive demand prediction')">
+                                    Predict Demand
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="card mt-4">
+                    <div class="card-header bg-warning text-dark">
+                        <i class="fas fa-shield-alt"></i> Deep Learning Lab
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <h5>LSTM Forecasting</h5>
+                                <p>7-day and 30-day demand forecasting using LSTM</p>
+                            </div>
+                            <div class="col-md-6">
+                                <h5>Anomaly Detection</h5>
+                                <p>Autoencoder-based fraud and anomaly detection</p>
+                                <button class="btn btn-warning btn-sm" onclick="alert('Launch: python dashboards/gradio_app.py')">
+                                    Launch Gradio Interface
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        // Logout
+        function logout() {
+            if (confirm('Are you sure you want to logout?')) {
+                localStorage.removeItem('token');
+                localStorage.removeItem('username');
+                window.location.href = 'login.html';
+            }
+        }
+    </script>
+</body>
+</html>
