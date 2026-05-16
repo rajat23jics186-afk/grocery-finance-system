@@ -2,38 +2,24 @@
 __pycache__/
 *.pyc
 *.pyo
-*.pyd
-.Python
-*.egg-info/
-dist/
-build/
-
 # Virtual environments
 venv/
 env/
-.env
 .venv/
-
-# Database files (Render has its own persistent disk)
+# Database
 data/*.db
-
-# Environment variables
+# Environment
 .env
 .env.local
-
 # IDE
 .vscode/
 .idea/
-
 # OS
 .DS_Store
 Thumbs.db
-
-# Uploads (user-generated content)
+# Uploads
 uploads/
-
-# AI Models (large binary files)
-models/
-
+# AI Models scalers only
+models/scalers/
 # Logs
 *.log
