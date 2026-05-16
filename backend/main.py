@@ -50,16 +50,17 @@ app.include_router(payments_router)
 app.include_router(reports_router)
 
 
+@app.get("/health")
+def health_check():
+    """Health check endpoint."""
+    return {"status": "healthy"}
+
+
 # Mount frontend templates at root
 templates_path = os.path.join(os.path.dirname(__file__), "../frontend/templates")
 if os.path.exists(templates_path):
     app.mount("/", StaticFiles(directory=templates_path, html=True), name="frontend")
 
-
-@app.get("/health")
-def health_check():
-    """Health check endpoint."""
-    return {"status": "healthy"}
 
 
 if __name__ == "__main__":
